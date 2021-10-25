@@ -9,7 +9,7 @@
 	let interests = []
 	let interestsSelected = []
 	let level = ""
-   $: console.log(interestsSelected);
+
 	onMount(async () => {
 			const response = await fetch(dataurl)
 			const data = await response.json()
@@ -35,7 +35,7 @@
     });
   }
 
-	function handleInterestSelection() {
+	function handleInterestSelection(si) {
       let data = [];
       data = programs.filter(program => {
         const programLevel = program.level === level ? true : false;
@@ -53,7 +53,7 @@
       dispatch("processdata", { data: data });
   }
   
-  
+  $: { handleInterestSelection(interestsSelected) }
 </script>
 
 <div>
@@ -87,7 +87,6 @@
               type="checkbox"
               name="interestsSelected"
               value={interest}
-              on:click={handleInterestSelection}
               bind:group={interestsSelected}
             />
             {interest}

@@ -17,11 +17,13 @@
 		});
 		
 		facilities = tempFacilities;
-		//console.log(facilities)
+		
 	});
 
 	function processProgramsData(event) {
 			let programs = event.detail.data;
+			console.log("Programs", programs)
+		
       const campus = {};
 
       programs.forEach(program => {
@@ -65,18 +67,18 @@
             });
           }
 
-          campus[locationId]["campusinfo"] = this.facilities[locationId];
+          campus[locationId]["campusinfo"] = facilities[locationId];
         });
       });
       campuses = campus;
-			console.log("In process programs data");
+			console.log("campuses" , campuses)
   }
 
 </script>
 
 <div>
 <FindYourFitForm on:processdata={processProgramsData} on:clearresults={campuses = {}} />
-{#each campuses as campus, key}
+{#each Object.values(campuses) as campus, key}
 	<Campus campus={campus} />
 {/each}
 
