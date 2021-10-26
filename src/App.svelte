@@ -5,6 +5,7 @@
 
 	let facilities = {}
   let campuses = {}
+	let showCampusList = false
 	const dataurl = "http://gisd.test/api/find-your-fit---campus-data"
 
 	onMount(async () => {
@@ -19,6 +20,11 @@
 		facilities = tempFacilities;
 		
 	});
+
+	function changeCampusListVisibility(event) {
+		showCampusList = event.detail.show
+		console.log("In show list")
+	}
 
 	function processProgramsData(event) {
 			let programs = event.detail.data;
@@ -77,10 +83,12 @@
 </script>
 
 <div>
-<FindYourFitForm on:processdata={processProgramsData} on:clearresults={campuses = {}} />
-{#each Object.values(campuses) as campus, key}
-	<Campus campus={campus} />
-{/each}
+<FindYourFitForm on:processdata={processProgramsData} on:clearresults={campuses = {}} on:changecampuslistvisibility={changeCampusListVisibility} />
+{#if showCampusList===true}
+	{#each Object.values(campuses) as campus, key}
+		<Campus campus={campus} />
+	{/each}
+{/if}
 
 </div>
 

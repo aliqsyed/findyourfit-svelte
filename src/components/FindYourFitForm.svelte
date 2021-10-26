@@ -1,7 +1,6 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
 	import { onMount } from 'svelte';
-import { prevent_default } from 'svelte/internal';
 
 	const dispatch = createEventDispatcher();
 	const dataurl = "http://gisd.test/api/find-your-fit"
@@ -12,20 +11,26 @@ import { prevent_default } from 'svelte/internal';
 	let level = ""
   let showInterestsForm = true
 
-function getIcon(key) {
-  const iconPath = '/images/'
-  const icons = {
-    'Accelerated/Advanced Curriculum' : 'ac',
-    'Languages Other Than English' : 'lote',//change
-    'Military' : 'military',
-    'STEM (Science, Technology, Engineering, Math)' : 'stem',
-    'Visual & Performing Arts (Art, Music, Theater)' : 'vapa',
-    'Business' : 'business',
-    'Law & Criminal Justice' : 'law',
-    'Radio, TV, Film': 'radio',
-    'Teaching' : 'teaching',
-    'Montessori' : 'montessori'//change 
-  }
+  onMount(async () => {
+    const response = await fetch(dataurl)
+    const data = await response.json()
+    programs = data  
+	});
+
+  function getIcon(key) {
+    const iconPath = '/images/'
+    const icons = {
+      'Accelerated/Advanced Curriculum' : 'ac',
+      'Languages Other Than English' : 'lote',//change
+      'Military' : 'military',
+      'STEM (Science, Technology, Engineering, Math)' : 'stem',
+      'Visual & Performing Arts (Art, Music, Theater)' : 'vapa',
+      'Business' : 'business',
+      'Law & Criminal Justice' : 'law',
+      'Radio, TV, Film': 'radio',
+      'Teaching' : 'teaching',
+      'Montessori' : 'montessori'//change 
+    }
 
   const iconExtension = 'png'
 
@@ -35,17 +40,15 @@ function getIcon(key) {
 
   return ""
 }
- 
 
-	onMount(async () => {
-			const response = await fetch(dataurl)
-			const data = await response.json()
-			programs = data;
-     
-	});
+  function showInterestsWithCampus() {
+      showInterestsForm = false;
+      dispatch('changecampuslistvisibility', {'show': true})
+  }
 
 	function getInterestsForLevel() {
-		interestsSelected = [];
+		interestsSelected = []
+    showInterestsForm = true
 		interests = [
 			...new Set(
 				programs
@@ -56,10 +59,16 @@ function getIcon(key) {
 					.sort()
 			)
 		];
-	
-		dispatch('clearresults', {
-      text: "Hello"
-    });
+    
+    dispatch('changecampuslistvisibility', {'show': false})
+		dispatch('clearresults', {});  
+  }
+
+  function resetFilter() {
+    dispatch('changecampuslistvisibility', {'show': false})
+		dispatch('clearresults', {}); 
+    showInterestsForm = true
+    level=""
   }
 
 	function handleInterestSelection(si) {
@@ -128,16 +137,17 @@ function getIcon(key) {
           {/each}
         </div>
         {#if interestsSelected.length}
-        <button class="submit-interests" type="button" on:click|preventDefault={() => showInterestsForm = false}>Submit</button>
+        <button class="submit-interests" type="button" on:click|preventDefault={showInterestsWithCampus}>Submit</button>
         {/if}
       </div>
       {/if}
 		{/if}
 
-		{#if interestsSelected.length}
+		{#if showInterestsForm !== true}
     <div class="you-searched-for">
       <h2>You searched for:</h2>
-      <div class="search-criteria">{ level } school { interestsSelected }</div>
+      <div class="search-criteria">{ level } school: { interestsSelected }</div>
+      <button class="reset-filters" type="button" on:click|preventDefault={resetFilter}>Reset</button>
     </div>
 		{/if}
   </div>
