@@ -85,8 +85,10 @@
 <div class="school-interest-finder">
 	<FindYourFitForm on:processdata={processProgramsData} on:clearresults={campuses = {}} on:changecampuslistvisibility={changeCampusListVisibility} />
 	{#if showCampusList===true}
-		{#each Object.values(campuses) as campus, key}
-			<Campus campus={campus} />
-		{/each}
+		<div class="campus-list">
+			{#each Object.values(campuses) as campus, key}
+				<Campus campus={campus} />
+			{/each}
+		</div>
 	{/if}
 </div>

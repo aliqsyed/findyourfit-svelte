@@ -4,7 +4,8 @@
 
 	const dispatch = createEventDispatcher();
 	const dataurl = "http://gisd.test/api/find-your-fit"
-
+  
+  const imagePath = "/images/"
 	let programs = []
 	let interests = []
 	let interestsSelected = []
@@ -92,64 +93,63 @@
   $: { handleInterestSelection(interestsSelected) }
 </script>
 
-<div>
-  <div>
-    <h3 id="levellabel" class="control-label">Select your school level</h3>
-    <div class="school-level-mobile">
-      <select
-        class="form-control"
-        aria-labelledby="levellabel"
-        name="level"
-        id="level"
-        bind:value={level}
-        style="width:90%"
-        on:change={getInterestsForLevel}
-      >
-        <option value>Select a level</option>
-        <option value="Elementary">Elementary</option>
-        <option value="Middle">Middle</option>
-        <option value="High">High</option>
-      </select>
-    </div>
-    <div class="school-level">
-      <button type="button" on:click|preventDefault={() =>{ level='Elementary'; getInterestsForLevel()}}><span class="button-text">Elementary</span><span class="button-image"><img src="/images/elem.png" alt=""></span></button>
-      <button type="button" on:click|preventDefault={() =>{ level='Middle'; getInterestsForLevel()}}><span class="button-text">Middle</span><span class="button-image"><img src="/images/middle.png" alt=""></span></button>
-      <button type="button" on:click|preventDefault={() =>{ level='High'; getInterestsForLevel()}}><span class="button-text">High</span><span class="button-image"><img src="/images/high.png" alt=""></span></button>
-    </div>
 
-		{#if (level !== '')}
-      {#if showInterestsForm}
-      <div class="interests">
-        <h2>Select your interests</h2>
-        <div class="interest-checkbox-container">
-          {#each interests as interest, i}
-          <div class="interest-checkbox">
-            <label>
-              <img src="{getIcon(interest)}" alt="">
-              <input
-                type="checkbox"
-                name="interestsSelected"
-                value={interest}
-                bind:group={interestsSelected}
-              />
-              {interest}
-            </label>
-          </div>
-          {/each}
-        </div>
-        {#if interestsSelected.length}
-        <button class="submit-interests" type="button" on:click|preventDefault={showInterestsWithCampus}>Submit</button>
-        {/if}
-      </div>
-      {/if}
-		{/if}
-
-		{#if showInterestsForm !== true}
-    <div class="showing-results-for">
-      <span>Showing Results For</span>
-      <span class="search-criteria"> "{interestsSelected.join(" | ")}"</span>
-      <button class="reset-filters" type="button" on:click|preventDefault={resetFilter}>Reset Filters</button>
-    </div>
-		{/if}
+<div class="selections">
+  <h3 id="levellabel" class="control-label">Select your school level</h3>
+  <div class="school-level-mobile">
+    <select
+      class="form-control"
+      aria-labelledby="levellabel"
+      name="level"
+      id="level"
+      bind:value={level}
+      style="width:90%"
+      on:change={getInterestsForLevel}
+    >
+      <option value>Select a level</option>
+      <option value="Elementary">Elementary</option>
+      <option value="Middle">Middle</option>
+      <option value="High">High</option>
+    </select>
   </div>
+  <div class="school-level">
+    <button type="button" on:click|preventDefault={() =>{ level='Elementary'; getInterestsForLevel()}}><span class="button-text">Elementary</span><span class="button-image"><img src={`${imagePath}elem.png`} alt=""></span></button>
+    <button type="button" on:click|preventDefault={() =>{ level='Middle'; getInterestsForLevel()}}><span class="button-text">Middle</span><span class="button-image"><img src={`${imagePath}middle.png`} alt=""></span></button>
+    <button type="button" on:click|preventDefault={() =>{ level='High'; getInterestsForLevel()}}><span class="button-text">High</span><span class="button-image"><img src={`${imagePath}high.png`} alt=""></span></button>
+  </div>
+
+  {#if (level !== '')}
+    {#if showInterestsForm}
+    <div class="interests">
+      <h2>Select your interests</h2>
+      <div class="interest-checkbox-container">
+        {#each interests as interest, i}
+        <div class="interest-checkbox">
+          <label>
+            <img src="{getIcon(interest)}" alt="">
+            <input
+              type="checkbox"
+              name="interestsSelected"
+              value={interest}
+              bind:group={interestsSelected}
+            />
+            {interest}
+          </label>
+        </div>
+        {/each}
+      </div>
+      {#if interestsSelected.length}
+      <button class="submit-interests" type="button" on:click|preventDefault={showInterestsWithCampus}>Submit</button>
+      {/if}
+    </div>
+    {/if}
+  {/if}
+
+  {#if showInterestsForm !== true}
+  <div class="showing-results-for">
+    <span>Showing Results For</span>
+    <span class="search-criteria"> "{interestsSelected.join(" | ")}"</span>
+    <button class="reset-filters" type="button" on:click|preventDefault={resetFilter}>Reset Filters</button>
+  </div>
+  {/if}
 </div>
