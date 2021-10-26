@@ -82,16 +82,11 @@
 
 </script>
 
-<div>
-<FindYourFitForm on:processdata={processProgramsData} on:clearresults={campuses = {}} on:changecampuslistvisibility={changeCampusListVisibility} />
-{#if showCampusList===true}
-	{#each Object.values(campuses) as campus, key}
-		<Campus campus={campus} />
-	{/each}
-{/if}
-
+<div class="school-interest-finder">
+	<FindYourFitForm on:processdata={processProgramsData} on:clearresults={campuses = {}} on:changecampuslistvisibility={changeCampusListVisibility} />
+	{#if showCampusList===true}
+		{#each Object.values(campuses) as campus, key}
+			<Campus campus={campus} />
+		{/each}
+	{/if}
 </div>
-
-<style>
-
-</style>

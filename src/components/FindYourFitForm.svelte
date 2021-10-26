@@ -94,10 +94,11 @@
 
 <div>
   <div>
+    <h3 id="levellabel" class="control-label">Select your school level</h3>
     <div class="school-level-mobile">
-      <label for="level" class="control-label">Select your school level</label>
       <select
         class="form-control"
+        aria-labelledby="levellabel"
         name="level"
         id="level"
         bind:value={level}
@@ -111,9 +112,9 @@
       </select>
     </div>
     <div class="school-level">
-      <button type="button" on:click|preventDefault={() =>{ level='Elementary'; getInterestsForLevel()}}>Elementary</button>
-      <button type="button" on:click|preventDefault={() =>{ level='Middle'; getInterestsForLevel()}}>Middle</button>
-      <button type="button" on:click|preventDefault={() =>{ level='High'; getInterestsForLevel()}}>High</button>
+      <button type="button" on:click|preventDefault={() =>{ level='Elementary'; getInterestsForLevel()}}><span class="button-text">Elementary</span><span class="button-image"><img src="/images/elem.png" alt=""></span></button>
+      <button type="button" on:click|preventDefault={() =>{ level='Middle'; getInterestsForLevel()}}><span class="button-text">Middle</span><span class="button-image"><img src="/images/middle.png" alt=""></span></button>
+      <button type="button" on:click|preventDefault={() =>{ level='High'; getInterestsForLevel()}}><span class="button-text">High</span><span class="button-image"><img src="/images/high.png" alt=""></span></button>
     </div>
 
 		{#if (level !== '')}
@@ -144,10 +145,10 @@
 		{/if}
 
 		{#if showInterestsForm !== true}
-    <div class="you-searched-for">
-      <h2>You searched for:</h2>
-      <div class="search-criteria">{ level } school: { interestsSelected }</div>
-      <button class="reset-filters" type="button" on:click|preventDefault={resetFilter}>Reset</button>
+    <div class="showing-results-for">
+      <span>Showing Results For</span>
+      <span class="search-criteria"> "{interestsSelected.join(" | ")}"</span>
+      <button class="reset-filters" type="button" on:click|preventDefault={resetFilter}>Reset Filters</button>
     </div>
 		{/if}
   </div>
