@@ -1,6 +1,7 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
 	import { onMount } from 'svelte';
+import { prevent_default } from 'svelte/internal';
 
 	const dispatch = createEventDispatcher();
 	const dataurl = "http://gisd.test/api/find-your-fit"
@@ -9,6 +10,32 @@
 	let interests = []
 	let interestsSelected = []
 	let level = ""
+  let showInterestsForm = true
+
+function getIcon(key) {
+  const iconPath = '/images/'
+  const icons = {
+    'Accelerated/Advanced Curriculum' : 'ac',
+    'Languages Other Than English' : 'lote',//change
+    'Military' : 'military',
+    'STEM (Science, Technology, Engineering, Math)' : 'stem',
+    'Visual & Performing Arts (Art, Music, Theater)' : 'vapa',
+    'Business' : 'business',
+    'Law & Criminal Justice' : 'law',
+    'Radio, TV, Film': 'radio',
+    'Teaching' : 'teaching',
+    'Montessori' : 'montessori'//change 
+  }
+
+  const iconExtension = 'png'
+
+  if (key in icons) {
+    return `${iconPath}${icons[key]}.${iconExtension}`
+  }
+
+  return ""
+}
+ 
 
 	onMount(async () => {
 			const response = await fetch(dataurl)
@@ -58,7 +85,7 @@
 
 <div>
   <div>
-    <div class="form-group">
+    <div class="school-level-mobile">
       <label for="level" class="control-label">Select your school level</label>
       <select
         class="form-control"
@@ -74,27 +101,37 @@
         <option value="High">High</option>
       </select>
     </div>
-
-		{#if level !== ''}
-    <div>
-      <h2>Select your interests</h2>
-
-      <div class="checkbox-container">
-				{#each interests as interest, i}
-        <div class="checkbox">
-          <label>
-            <input
-              type="checkbox"
-              name="interestsSelected"
-              value={interest}
-              bind:group={interestsSelected}
-            />
-            {interest}
-          </label>
-        </div>
-				{/each}
-      </div>
+    <div class="school-level">
+      <button type="button" on:click|preventDefault={() =>{ level='Elementary'; getInterestsForLevel()}}>Elementary</button>
+      <button type="button" on:click|preventDefault={() =>{ level='Middle'; getInterestsForLevel()}}>Middle</button>
+      <button type="button" on:click|preventDefault={() =>{ level='High'; getInterestsForLevel()}}>High</button>
     </div>
+
+		{#if (level !== '')}
+      {#if showInterestsForm}
+      <div class="interests">
+        <h2>Select your interests</h2>
+        <div class="interest-checkbox-container">
+          {#each interests as interest, i}
+          <div class="interest-checkbox">
+            <label>
+              <img src="{getIcon(interest)}" alt="">
+              <input
+                type="checkbox"
+                name="interestsSelected"
+                value={interest}
+                bind:group={interestsSelected}
+              />
+              {interest}
+            </label>
+          </div>
+          {/each}
+        </div>
+        {#if interestsSelected.length}
+        <button class="submit-interests" type="button" on:click|preventDefault={() => showInterestsForm = false}>Submit</button>
+        {/if}
+      </div>
+      {/if}
 		{/if}
 
 		{#if interestsSelected.length}
