@@ -1,6 +1,7 @@
 <script>
 	import { createEventDispatcher } from 'svelte';
 	import { onMount } from 'svelte';
+  import { fade } from 'svelte/transition';
 
 	const dispatch = createEventDispatcher();
 	const dataurl = "http://gisd.test/api/find-your-fit"
@@ -120,7 +121,7 @@
 
   {#if (level !== '')}
     {#if showInterestsForm}
-    <div class="interests">
+    <div class="interests" transition:fade>
       <h2>Select your interests</h2>
       <div class="interest-checkbox-container">
         {#each interests as interest, i}
@@ -146,7 +147,7 @@
   {/if}
 
   {#if showInterestsForm !== true}
-  <div class="showing-results-for">
+  <div class="showing-results-for" transition:fade>
     <span>Showing Results For</span>
     <span class="search-criteria"> "{interestsSelected.join(" | ")}"</span>
     <button class="reset-filters" type="button" on:click|preventDefault={resetFilter}>Reset Filters</button>

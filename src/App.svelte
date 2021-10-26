@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import { fade } from 'svelte/transition'
 	import FindYourFitForm from './components/FindYourFitForm.svelte'
 	import Campus from './components/Campus.svelte'
 
@@ -85,7 +86,7 @@
 <div class="school-interest-finder">
 	<FindYourFitForm on:processdata={processProgramsData} on:clearresults={campuses = {}} on:changecampuslistvisibility={changeCampusListVisibility} />
 	{#if showCampusList===true}
-		<div class="campus-list">
+		<div class="campus-list" transition:fade>
 			{#each Object.values(campuses) as campus, key}
 				<Campus campus={campus} />
 			{/each}
